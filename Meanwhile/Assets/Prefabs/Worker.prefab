@@ -284,7 +284,8 @@ MonoBehaviour:
   testDestination: {fileID: 0}
   woodChoppingStation: {fileID: 0}
   offloadStation: {fileID: 0}
-  busyCutting: 0
+  agentDistanceModifier: 0.5
+  busy: 0
 --- !u!195 &2016424281
 NavMeshAgent:
   m_ObjectHideFlags: 0

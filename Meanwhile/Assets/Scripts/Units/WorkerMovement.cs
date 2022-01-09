@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class WorkerMovement : MonoBehaviour
 {
-
-
     [Header("NavMesh Agent Config")]
     [SerializeField] private NavMeshAgent agent;
     public float moveSpeed;
@@ -15,7 +13,7 @@ public class WorkerMovement : MonoBehaviour
     public GameObject testDestination;
 
     Vector3 initialPos;
-    public GameObject woodChoppingStation;
+    [SerializeField] private GameObject woodChoppingStation;
     public GameObject offloadStation;
 
     [SerializeField] private float agentDistanceModifier; // this is added because agent doesn't get to the point with 0f distance but rather less than 0.5f
@@ -23,6 +21,7 @@ public class WorkerMovement : MonoBehaviour
     [Header("Worker Config")]
 
     private Worker workerConfig;
+    public Worker WorkerConfig { get { return workerConfig; } }
     [SerializeField] private bool busy;
 
     void Start()
@@ -60,17 +59,16 @@ public class WorkerMovement : MonoBehaviour
         }
     }
 
+    // Every frame checks the worker's state and behaves accordingly
     public void BehaviourStateMachine()
     {
         if (workerConfig.CurrentState == WorkerState.Cutting && !busy)
         {
-            // IF already CAP move to offload -> TODO
             busy = true;
             StartCoroutine(ChoppingWoodCoroutine());
         }
         else if (workerConfig.CurrentState == WorkerState.Offloading && !busy)
         {
-            // IF already empty move to wood chopping station -> TODO TODO
             busy = true;
             StartCoroutine(OffloadingWoodCoroutine());
         }
@@ -84,13 +82,14 @@ public class WorkerMovement : MonoBehaviour
         }
     }
 
+    // 
     public void AnalyzeState()
     {
-        if (Vector2.Distance(transform.position, woodChoppingStation.transform.position) <= agentDistanceModifier)
+        if (woodChoppingStation != null && Vector2.Distance(transform.position, woodChoppingStation.transform.position) <= agentDistanceModifier)
         {
             workerConfig.SetState(WorkerState.Cutting);
         }
-        else if (Vector3.Distance(transform.position, offloadStation.transform.position) <= agentDistanceModifier)
+        else if (offloadStation != null && Vector3.Distance(transform.position, offloadStation.transform.position) <= agentDistanceModifier)
         {
             workerConfig.SetState(WorkerState.Offloading);
         }
@@ -106,15 +105,17 @@ public class WorkerMovement : MonoBehaviour
 
     public IEnumerator ChoppingWoodCoroutine()
     {
-        for (int i = 0; i < workerConfig.resourceCarryCap; i++)
+        int remainingResourcePlace = workerConfig.resourceCarryCap - workerConfig.carryingWoodAmount;
+
+        for (int i = 0; i < remainingResourcePlace; i++)
         {
             workerConfig.carryingWoodAmount += 1;
-            print($"Cut 1 more wood. Worker is currently carrying {workerConfig.carryingWoodAmount}");
+            print($"Cut 1 more wood. {workerConfig.WorkerName} is currently carrying {workerConfig.carryingWoodAmount}");
             yield return new WaitForSeconds(2f);
         }
 
         agent.SetDestination(offloadStation.transform.position);
-        Debug.Log($"<color=#00FF00><b>Moving towards {offloadStation.transform.position}</b></color>");
+        Debug.Log($"<color=#00FF00><b>{workerConfig.WorkerName} is moving towards {offloadStation.transform.position}</b></color>");
         yield return new WaitForSeconds(1f);
         busy = false;
         yield return null;
@@ -122,18 +123,18 @@ public class WorkerMovement : MonoBehaviour
 
     public IEnumerator OffloadingWoodCoroutine()
     {
-        var carryingAmount = workerConfig.carryingWoodAmount;
+        int carryingAmount = workerConfig.carryingWoodAmount;
 
         for (int i = 0; i < carryingAmount; i++)
         {
             workerConfig.carryingWoodAmount -= 1;
             GameManager.Instance.woods += 1;
-            print($"Cut 1 more wood. Worker is currently carrying {workerConfig.carryingWoodAmount}");
+            print($"Cut 1 more wood. {workerConfig.WorkerName} is currently carrying {workerConfig.carryingWoodAmount}");
             yield return new WaitForSeconds(2f);
         }
 
         agent.SetDestination(initialPos);
-        Debug.Log($"<color=#00FF00><b>Moving towards {initialPos}</b></color>");
+        Debug.Log($"<color=#00FF00><b>{workerConfig.WorkerName} is moving towards {initialPos}</b></color>");
         yield return new WaitForSeconds(1f);
         busy = false;
         yield return null;
@@ -143,7 +144,7 @@ public class WorkerMovement : MonoBehaviour
     {
         if (!busy)
         {
-            Debug.Log($"<color=#00FF00><b>Moving towards {newDestination}</b></color>");
+            Debug.Log($"<color=#00FF00><b>{workerConfig.WorkerName} is moving towards {newDestination}</b></color>");
             agent.SetDestination(newDestination);
         }
         else
@@ -156,13 +157,19 @@ public class WorkerMovement : MonoBehaviour
     {
         if (!busy)
         {
-            Debug.Log($"<color=#00FF00><b>Moving towards {newDestination.name}</b></color>");
+            Debug.Log($"<color=#00FF00><b>{workerConfig.WorkerName} is moving towards {newDestination.name}</b></color>");
             agent.SetDestination(newDestination.transform.position);
         }
         else
         {
             print($"<b><color=red>Currently busy {workerConfig.CurrentState}, can't Move to {newDestination.name}</color></b>");
         }
+    }
+
+
+    public void AssignWoodStation(WoodStation ws)
+    {
+        woodChoppingStation = ws.gameObject;
     }
 }
 
