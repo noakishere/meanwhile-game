@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
 {
+    [Header("Workers")]
+    [SerializeField] private List<Worker> workers;
+    [SerializeField] private GameObject workerPrefab;
+    [SerializeField] private Transform recruitPoint;
+
+    [Header("Stations Manager")]
     [SerializeField] private WoodStation[] choppingWoodStations;
     public WoodStation[] ChoppingWoodStations { get { return choppingWoodStations; } }
+    public GameObject offloadStation;
+
 
 
     // Start is called before the first frame update
@@ -22,19 +30,33 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
             var workers = FindObjectsOfType<WorkerMovement>();
             foreach (WorkerMovement worker in workers)
             {
+                worker.offloadStation = offloadStation;
                 AssignWorkerStation(worker);
             }
         }
     }
 
+    public void HireNewWoker()
+    {
+        var newHire = Instantiate(workerPrefab, recruitPoint.position, Quaternion.identity);
+        workers.Add(newHire.GetComponent<Worker>());
+        print("one");
+        AssignWorkerStation(newHire.GetComponent<WorkerMovement>());
+    }
+
     public void AssignWorkerStation(WorkerMovement worker)
     {
-        foreach (WoodStation station in choppingWoodStations)
+        print("two");
+        if (worker.WoodChoppingStation == null)
         {
-            if (!station.isAssigned)
+            worker.offloadStation = offloadStation;
+            foreach (WoodStation station in choppingWoodStations)
             {
-                station.Assign(worker);
-                break;
+                if (!station.isAssigned)
+                {
+                    station.Assign(worker);
+                    break;
+                }
             }
         }
     }

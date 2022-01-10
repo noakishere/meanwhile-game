@@ -139,7 +139,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2876244613363422924}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.43, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1993790782}
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   workerHealth: 100
-  timeBetweenDmg: 2.25
+  timeBetweenDmg: 3
   timeBetweenDmgModifier: 0.25
   currentTimeBetweenDmg: 0
   namesList: {fileID: 11400000, guid: 7790e27d6ed1e904e90ee07b6d4cf467, type: 2}
@@ -282,10 +282,12 @@ MonoBehaviour:
   agent: {fileID: 0}
   moveSpeed: 8
   testDestination: {fileID: 0}
+  initialPos: {x: 0, y: 0, z: 0}
   woodChoppingStation: {fileID: 0}
   offloadStation: {fileID: 0}
   agentDistanceModifier: 0.5
   busy: 0
+  isStopped: 0
 --- !u!195 &2016424281
 NavMeshAgent:
   m_ObjectHideFlags: 0

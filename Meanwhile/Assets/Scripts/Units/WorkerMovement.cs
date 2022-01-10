@@ -10,10 +10,17 @@ public class WorkerMovement : MonoBehaviour
     public float moveSpeed;
 
     [Header("Destinations")]
-    public GameObject testDestination;
+    public GameObject testDestination; //testing purposes
 
-    Vector3 initialPos;
+    [SerializeField] private Vector3 initialPos;
     [SerializeField] private GameObject woodChoppingStation;
+    public GameObject WoodChoppingStation
+    {
+        get
+        {
+            return woodChoppingStation;
+        }
+    }
     public GameObject offloadStation;
 
     [SerializeField] private float agentDistanceModifier; // this is added because agent doesn't get to the point with 0f distance but rather less than 0.5f
@@ -24,25 +31,25 @@ public class WorkerMovement : MonoBehaviour
     public Worker WorkerConfig { get { return workerConfig; } }
     [SerializeField] private bool busy;
 
+
+
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
-        agent.speed = moveSpeed;
-
+        AgentSetup();
         agent.SetDestination(transform.position);
 
         initialPos = transform.position;
 
         workerConfig = GetComponent<Worker>();
     }
+    public bool isStopped;
 
     // Update is called once per frame
     void Update()
     {
         BehaviourStateMachine();
         AnalyzeState();
+        // isStopped = agent.isStopped;
 
         // TESTING PURPOSES
         if (Input.GetKeyDown(KeyCode.S))
@@ -57,6 +64,16 @@ public class WorkerMovement : MonoBehaviour
         {
             MoveToDestination(woodChoppingStation);
         }
+
+        transform.position = agent.nextPosition; //fixes the state issue somehow. States update correctly according to the distance. Weird.
+    }
+
+    private void AgentSetup()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        agent.speed = moveSpeed;
     }
 
     // Every frame checks the worker's state and behaves accordingly
@@ -89,8 +106,9 @@ public class WorkerMovement : MonoBehaviour
         {
             workerConfig.SetState(WorkerState.Cutting);
         }
-        else if (offloadStation != null && Vector3.Distance(transform.position, offloadStation.transform.position) <= agentDistanceModifier)
+        else if (offloadStation != null && Vector3.Distance(transform.position, offloadStation.transform.position) <= 1.1f)
         {
+            // print($"<b>{Vector3.Distance(transform.position, offloadStation.transform.position)} for {workerConfig.WorkerName}</b>");
             workerConfig.SetState(WorkerState.Offloading);
         }
         else if (Vector3.Distance(transform.position, agent.destination) > 0)

@@ -53,21 +53,9 @@ public class Worker : MonoBehaviour
         GenerateInformation();
     }
 
-    private void GenerateInformation()
-    {
-        var namesArray = namesList.names;
-        workerName = namesArray[Random.Range(0, namesArray.Length)];
-        textMesh.text = workerName;
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            // TakeDamage(Modifiers.WorkerDamageSmall);
-        }
-
         if (state == WorkerState.Walking)
         {
             if (currentTimeBetweenDmg >= timeBetweenDmg)
@@ -76,7 +64,13 @@ public class Worker : MonoBehaviour
             }
             currentTimeBetweenDmg += timeBetweenDmgModifier * Time.deltaTime;
         }
+    }
 
+    private void GenerateInformation()
+    {
+        var namesArray = namesList.names;
+        workerName = namesArray[Random.Range(0, namesArray.Length)];
+        textMesh.text = workerName;
     }
 
     public void TakeDamage(float dmg)
