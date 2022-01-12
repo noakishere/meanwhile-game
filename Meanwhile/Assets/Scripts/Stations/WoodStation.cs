@@ -8,7 +8,6 @@ public class WoodStation : Station
 
     public override void Assign(WorkerMovement newWorker)
     {
-        print("three");
         if (isAssigned)
         {
             print($"The station {stationID} is already assigned to {currentWorker.WorkerName}.");
@@ -17,7 +16,7 @@ public class WoodStation : Station
         {
             currentWorker = newWorker.WorkerConfig; //WorkerConfig returns Worker class
             newWorker.AssignWoodStation(this);
-            // print($"The station {stationID} is being assigned to {currentWorker.WorkerName}.");
+            print($"The station {stationID} is being assigned to {currentWorker.WorkerName}.");
             isAssigned = true;
         }
     }

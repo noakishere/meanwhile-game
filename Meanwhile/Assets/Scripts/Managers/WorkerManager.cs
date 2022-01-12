@@ -40,13 +40,16 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
     {
         var newHire = Instantiate(workerPrefab, recruitPoint.position, Quaternion.identity);
         workers.Add(newHire.GetComponent<Worker>());
-        print("one");
         AssignWorkerStation(newHire.GetComponent<WorkerMovement>());
+    }
+
+    public void WorkerOut(Worker thisWorker)
+    {
+        workers.Remove(thisWorker);
     }
 
     public void AssignWorkerStation(WorkerMovement worker)
     {
-        print("two");
         if (worker.WoodChoppingStation == null)
         {
             worker.offloadStation = offloadStation;

@@ -5,3 +5,12 @@ public enum WorkerState
     Cutting,
     Offloading
 }
+
+public enum GameState
+{
+    Normal,
+    NotWork,
+    Buyer,
+    Pause
+}
+

@@ -8,12 +8,20 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [Header("Resources")]
     public int woods;
 
-    // TEST, CLEAN UP LATER
-    public TMP_Text woodsText;
+    private void OnEnable()
+    {
+        GameEventBus.Subscribe(GameState.Pause, delegate { print("Pause babes"); });
+    }
 
     private void Update()
     {
-        woodsText.text = $"Woods: {woods}";
+
+    }
+
+    public void IncrementWood(int woodNum)
+    {
+        woods += woodNum;
+        UIManager.Instance.UpdateWoodsText(woods);
     }
 
 }

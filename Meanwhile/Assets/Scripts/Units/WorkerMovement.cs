@@ -31,7 +31,10 @@ public class WorkerMovement : MonoBehaviour
     public Worker WorkerConfig { get { return workerConfig; } }
     [SerializeField] private bool busy;
 
-
+    private void Awake()
+    {
+        workerConfig = GetComponent<Worker>();
+    }
 
     void Start()
     {
@@ -40,8 +43,9 @@ public class WorkerMovement : MonoBehaviour
 
         initialPos = transform.position;
 
-        workerConfig = GetComponent<Worker>();
+        MoveToDestination(woodChoppingStation);
     }
+
     public bool isStopped;
 
     // Update is called once per frame
@@ -49,7 +53,6 @@ public class WorkerMovement : MonoBehaviour
     {
         BehaviourStateMachine();
         AnalyzeState();
-        // isStopped = agent.isStopped;
 
         // TESTING PURPOSES
         if (Input.GetKeyDown(KeyCode.S))
@@ -128,7 +131,7 @@ public class WorkerMovement : MonoBehaviour
         for (int i = 0; i < remainingResourcePlace; i++)
         {
             workerConfig.carryingWoodAmount += 1;
-            print($"Cut 1 more wood. {workerConfig.WorkerName} is currently carrying {workerConfig.carryingWoodAmount}");
+            // print($"Cut 1 more wood. {workerConfig.WorkerName} is currently carrying {workerConfig.carryingWoodAmount}");
             yield return new WaitForSeconds(2f);
         }
 
@@ -146,12 +149,13 @@ public class WorkerMovement : MonoBehaviour
         for (int i = 0; i < carryingAmount; i++)
         {
             workerConfig.carryingWoodAmount -= 1;
-            GameManager.Instance.woods += 1;
-            print($"Cut 1 more wood. {workerConfig.WorkerName} is currently carrying {workerConfig.carryingWoodAmount}");
+            GameManager.Instance.IncrementWood(1);
+            // print($"Offloaded 1 more wood. {workerConfig.WorkerName} is currently carrying {workerConfig.carryingWoodAmount}");
             yield return new WaitForSeconds(2f);
         }
 
-        agent.SetDestination(initialPos);
+        // TODO: when day's done they should go to rest. A method should decide next move after offloading.
+        agent.SetDestination(woodChoppingStation.transform.position);
         Debug.Log($"<color=#00FF00><b>{workerConfig.WorkerName} is moving towards {initialPos}</b></color>");
         yield return new WaitForSeconds(1f);
         busy = false;
@@ -183,7 +187,6 @@ public class WorkerMovement : MonoBehaviour
             print($"<b><color=red>Currently busy {workerConfig.CurrentState}, can't Move to {newDestination.name}</color></b>");
         }
     }
-
 
     public void AssignWoodStation(WoodStation ws)
     {
