@@ -46,17 +46,18 @@ public class Worker : MonoBehaviour
     [SerializeField] private GameObject textMeshContainer;
     public TextMesh textMesh;
 
-
-
+    public bool isTakeDamage;
     void Start()
     {
+        isTakeDamage = false;
         GenerateInformation();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (state == WorkerState.Walking) // Maybe if != idle then take damage? we'll see
+        // if (state == WorkerState.Walking) // Maybe if != idle then take damage? we'll see
+        if (isTakeDamage)
         {
             if (currentTimeBetweenDmg >= timeBetweenDmg)
             {

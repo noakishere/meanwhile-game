@@ -5,13 +5,21 @@ using UnityEngine.AI;
 
 public class WorkerMovement : MonoBehaviour
 {
+    #region Properties
     [Header("NavMesh Agent Config")]
     [SerializeField] private NavMeshAgent agent;
-    public float moveSpeed;
+    public NavMeshAgent Agent => agent;
+    [SerializeField] private float moveSpeed;
+
+    private void AgentSetup()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        agent.speed = moveSpeed;
+    }
 
     [Header("Destinations")]
-    public GameObject testDestination; //testing purposes
-
     [SerializeField] private Vector3 initialPos;
     [SerializeField] private GameObject woodChoppingStation;
     public GameObject WoodChoppingStation
@@ -25,7 +33,6 @@ public class WorkerMovement : MonoBehaviour
 
     [SerializeField] public GameObject workerHouse;
 
-
     [SerializeField] private float agentDistanceModifier; // this is added because agent doesn't get to the point with 0f distance but rather less than 0.5f
 
     [Header("Worker Config")]
@@ -33,136 +40,72 @@ public class WorkerMovement : MonoBehaviour
     private Worker workerConfig;
     public Worker WorkerConfig { get { return workerConfig; } }
     [SerializeField] private bool busy;
+    public bool isBusy => busy;
 
     private void Awake()
     {
         workerConfig = GetComponent<Worker>();
     }
 
+    // Worker State Management
+    private IWorkerState _idleState, _walkingState, _cuttingState, _offloadingState;
+
+    private WorkerStateContext _workerStateContext;
+
+    private void StateContextSetup()
+    {
+        _workerStateContext = new WorkerStateContext(this);
+
+        _idleState = gameObject.AddComponent<WorkerIdleState>();
+        _walkingState = gameObject.AddComponent<WorkerWalkingState>();
+        _cuttingState = gameObject.AddComponent<WorkerCuttingState>();
+        _offloadingState = gameObject.AddComponent<WorkerOffloadingState>();
+
+        _workerStateContext.Transition(_idleState);
+    }
+
+    #endregion
+
+    #region UnityMethods
     void Start()
     {
+        busy = false;
         AgentSetup();
-        agent.SetDestination(transform.position);
+        StateContextSetup();
 
         initialPos = transform.position;
 
         MoveToDestination(woodChoppingStation);
     }
 
-    public bool isStopped;
-
-    // Update is called once per frame
     void Update()
     {
-        BehaviourStateMachine();
         AnalyzeState();
-
-        // TESTING PURPOSES
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            MoveToDestination(testDestination);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            MoveToDestination(initialPos);
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            MoveToDestination(woodChoppingStation);
-        }
 
         transform.position = agent.nextPosition; //fixes the state issue somehow. States update correctly according to the distance. Weird.
     }
 
-    private void AgentSetup()
-    {
-        agent = GetComponent<NavMeshAgent>();
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
-        agent.speed = moveSpeed;
-    }
+    #endregion
 
-    // Every frame checks the worker's state and behaves accordingly
-    public void BehaviourStateMachine()
-    {
-        if (workerConfig.CurrentState == WorkerState.Cutting && !busy)
-        {
-            busy = true;
-            StartCoroutine(ChoppingWoodCoroutine());
-        }
-        else if (workerConfig.CurrentState == WorkerState.Offloading && !busy)
-        {
-            busy = true;
-            StartCoroutine(OffloadingWoodCoroutine());
-        }
-        else if (workerConfig.CurrentState == WorkerState.Walking)
-        {
-            // print("Worker is walking");
-        }
-        else if (workerConfig.CurrentState == WorkerState.Idle)
-        {
-            // print("Worker is idle");
-        }
-    }
-
-    // 
+    #region Methods
     public void AnalyzeState()
     {
         if (woodChoppingStation != null && Vector2.Distance(transform.position, woodChoppingStation.transform.position) <= agentDistanceModifier)
         {
-            workerConfig.SetState(WorkerState.Cutting);
+            _workerStateContext.Transition(_cuttingState);
         }
         else if (offloadStation != null && Vector3.Distance(transform.position, offloadStation.transform.position) <= 1.1f)
         {
-            // print($"<b>{Vector3.Distance(transform.position, offloadStation.transform.position)} for {workerConfig.WorkerName}</b>");
-            workerConfig.SetState(WorkerState.Offloading);
+            _workerStateContext.Transition(_offloadingState);
         }
         else if (Vector3.Distance(transform.position, agent.destination) > 0)
         {
-            workerConfig.SetState(WorkerState.Walking);
+            _workerStateContext.Transition(_walkingState);
         }
         else
         {
-            workerConfig.SetState(WorkerState.Idle);
+            _workerStateContext.Transition(_idleState);
         }
-    }
-
-    public IEnumerator ChoppingWoodCoroutine()
-    {
-        int remainingResourcePlace = workerConfig.resourceCarryCap - workerConfig.carryingWoodAmount;
-
-        for (int i = 0; i < remainingResourcePlace; i++)
-        {
-            workerConfig.carryingWoodAmount += 1;
-            // print($"Cut 1 more wood. {workerConfig.WorkerName} is currently carrying {workerConfig.carryingWoodAmount}");
-            yield return new WaitForSeconds(2f);
-        }
-
-        agent.SetDestination(offloadStation.transform.position);
-        Debug.Log($"<color=#00FF00><b>{workerConfig.WorkerName} is moving towards {offloadStation.transform.position}</b></color>");
-        yield return new WaitForSeconds(1f);
-        busy = false;
-        yield return null;
-    }
-
-    public IEnumerator OffloadingWoodCoroutine()
-    {
-        int carryingAmount = workerConfig.carryingWoodAmount;
-
-        for (int i = 0; i < carryingAmount; i++)
-        {
-            workerConfig.carryingWoodAmount -= 1;
-            GameManager.Instance.IncrementWood(1);
-            // print($"Offloaded 1 more wood. {workerConfig.WorkerName} is currently carrying {workerConfig.carryingWoodAmount}");
-            yield return new WaitForSeconds(2f);
-        }
-
-        // TODO: when day's done they should go to rest. A method should decide next move after offloading.
-        agent.SetDestination(woodChoppingStation.transform.position);
-        Debug.Log($"<color=#00FF00><b>{workerConfig.WorkerName} is moving towards {initialPos}</b></color>");
-        yield return new WaitForSeconds(1f);
-        busy = false;
-        yield return null;
     }
 
     public void MoveToDestination(Vector3 newDestination)
@@ -195,6 +138,13 @@ public class WorkerMovement : MonoBehaviour
     {
         woodChoppingStation = ws.gameObject;
     }
+
+    public void ToggleBusy()
+    {
+        busy = !busy;
+    }
+
+    #endregion
 }
 
 

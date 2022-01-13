@@ -285,6 +285,7 @@ MonoBehaviour:
   initialPos: {x: 0, y: 0, z: 0}
   woodChoppingStation: {fileID: 0}
   offloadStation: {fileID: 0}
+  workerHouse: {fileID: 0}
   agentDistanceModifier: 0.5
   busy: 0
   isStopped: 0
