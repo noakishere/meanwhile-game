@@ -56,7 +56,7 @@ public class Worker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (state == WorkerState.Walking)
+        if (state == WorkerState.Walking) // Maybe if != idle then take damage? we'll see
         {
             if (currentTimeBetweenDmg >= timeBetweenDmg)
             {
@@ -76,8 +76,23 @@ public class Worker : MonoBehaviour
     public void TakeDamage(float dmg)
     {
         workerHealth -= dmg;
-        currentTimeBetweenDmg = 0f;
-        print($"Worker received {dmg} damages");
+        if (workerHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            currentTimeBetweenDmg = 0f;
+            print($"Worker received {dmg} damages");
+        }
+    }
+
+    public void Die()
+    {
+        WorkerManager.Instance.WorkerOut(this);
+        gameObject.GetComponent<WorkerMovement>().workerHouse.GetComponent<WorkerHouses>().DeAssign();
+        gameObject.GetComponent<WorkerMovement>().WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
+        Destroy(gameObject);
     }
 
 
@@ -95,8 +110,4 @@ public class Worker : MonoBehaviour
     {
         textMeshContainer.SetActive(false);
     }
-
 }
-
-
-

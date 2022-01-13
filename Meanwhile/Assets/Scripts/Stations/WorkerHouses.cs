@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WoodStation : Station
+public class WorkerHouses : Station
 {
     [SerializeField] private Worker currentWorker;
 
@@ -10,20 +10,19 @@ public class WoodStation : Station
     {
         if (isAssigned)
         {
-            print($"The station {this.gameObject.name} is already assigned to {currentWorker.WorkerName}.");
+            print($"The house {this.gameObject.name} is already assigned to {currentWorker.WorkerName}.");
         }
         else
         {
             currentWorker = newWorker.WorkerConfig; //WorkerConfig returns Worker class
-            newWorker.AssignWoodStation(this);
-            print($"The station {this.gameObject.name} is being assigned to {currentWorker.WorkerName}.");
+            newWorker.workerHouse = this.gameObject;
+            print($"The house {this.gameObject.name} is being assigned to {currentWorker.WorkerName}.");
             isAssigned = true;
         }
     }
 
     public override void DeAssign()
     {
-        // print($"The station {stationID} is no longer assigned to {currentWorker.WorkerName}.");
         isAssigned = false;
         currentWorker = null;
     }

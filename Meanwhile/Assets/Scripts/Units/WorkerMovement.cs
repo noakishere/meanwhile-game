@@ -23,6 +23,9 @@ public class WorkerMovement : MonoBehaviour
     }
     public GameObject offloadStation;
 
+    [SerializeField] public GameObject workerHouse;
+
+
     [SerializeField] private float agentDistanceModifier; // this is added because agent doesn't get to the point with 0f distance but rather less than 0.5f
 
     [Header("Worker Config")]

@@ -8,5 +8,6 @@ public static class Modifiers
     public const float WorkerDamageMedium = 20f;
     public const float WorkerDamageHigh = 40f;
 
+    public const int MaxWorkersCount = 5;
 
 }

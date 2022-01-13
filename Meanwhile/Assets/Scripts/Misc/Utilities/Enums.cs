@@ -11,6 +11,10 @@ public enum GameState
     Normal,
     NotWork,
     Buyer,
+    Hire,
+    Sell,
+    WoodUpdate,
+    GoldUpdate,
     Pause
 }
 
