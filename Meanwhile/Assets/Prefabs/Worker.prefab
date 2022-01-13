@@ -185,7 +185,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1247984199
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -3414918293368190892, guid: b2a8fe0cef4f17d489f2fce2cb163a5a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -267,6 +267,7 @@ MonoBehaviour:
   carryingWoodAmount: 0
   textMeshContainer: {fileID: 1993790781}
   textMesh: {fileID: 1993790783}
+  isTakeDamage: 0
 --- !u!114 &8630894388054007900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,14 +282,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
   moveSpeed: 8
-  testDestination: {fileID: 0}
   initialPos: {x: 0, y: 0, z: 0}
   woodChoppingStation: {fileID: 0}
   offloadStation: {fileID: 0}
   workerHouse: {fileID: 0}
   agentDistanceModifier: 0.5
   busy: 0
-  isStopped: 0
 --- !u!195 &2016424281
 NavMeshAgent:
   m_ObjectHideFlags: 0
