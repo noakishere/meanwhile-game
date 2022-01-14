@@ -4,10 +4,12 @@ using UnityEngine;
 
 public static class Modifiers
 {
-    public const float WorkerDamageSmall = 10f;
-    public const float WorkerDamageMedium = 20f;
-    public const float WorkerDamageHigh = 40f;
+    public const int WorkerDamageSmall = 10;
+    public const int WorkerDamageMedium = 20;
+    public const int WorkerDamageHigh = 40;
 
     public const int MaxWorkersCount = 5;
+
+    public const int WorkerPrice = 5;
 
 }

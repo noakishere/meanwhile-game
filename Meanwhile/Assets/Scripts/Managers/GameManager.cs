@@ -44,9 +44,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         GameEventBus.Publish(GameState.GoldUpdate);
     }
 
-    public void SpendGold(int goldToSpend)
+    public void SpendGold(int goldToSpend = Modifiers.WorkerPrice)
     {
-        if (golds - goldToSpend >= 0)
+        if (HasEnoughGold(goldToSpend))
         {
             golds -= goldToSpend;
             GameEventBus.Publish(GameState.GoldUpdate);
@@ -56,5 +56,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             // TODO: proper display that gold isn't enough to do this.
             print($"Not enough gold is available. {goldToSpend} is out of our {golds} budget.");
         }
+    }
+
+    public bool HasEnoughGold(int goldToSpend)
+    {
+        return golds - goldToSpend >= 0;
     }
 }

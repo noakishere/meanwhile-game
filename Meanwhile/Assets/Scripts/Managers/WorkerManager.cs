@@ -45,16 +45,16 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
 
     public void HireNewWoker()
     {
-        if (workers.Count < Modifiers.MaxWorkersCount)
+        if (GameManager.Instance.HasEnoughGold(Modifiers.WorkerPrice) && workers.Count < Modifiers.MaxWorkersCount)
         {
+            GameManager.Instance.SpendGold();
+
             var newHire = Instantiate(workerPrefab, recruitPoint.position, Quaternion.identity);
 
             workers.Add(newHire.GetComponent<Worker>());
 
             AssignWorkerStation(newHire.GetComponent<WorkerMovement>());
             AssignWorkerHome(newHire.GetComponent<WorkerMovement>());
-
-            // WorkersCount = workers.Count;
 
             GameEventBus.Publish(GameState.Hire);
         }
@@ -77,6 +77,7 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
     {
         if (workers.Count == 5) { UIManager.Instance.EnableHireButton(); } // THERE SHOULD BE A BETTER WAY TO DO THIS
         workers.Remove(thisWorker);
+        GameEventBus.Publish(GameState.Hire); // to update th ui text for the right amount of workers
     }
 
     public void AssignWorkerStation(WorkerMovement worker)

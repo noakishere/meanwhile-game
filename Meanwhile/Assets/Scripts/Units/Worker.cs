@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Worker : MonoBehaviour
 {
@@ -17,8 +18,8 @@ public class Worker : MonoBehaviour
     }
 
     [Header("Health related")]
-    [SerializeField] private float workerHealth;
-    public float WorkerHealth
+    [SerializeField] private int workerHealth;
+    public int WorkerHealth
     {
         get { return workerHealth; }
     }
@@ -45,6 +46,8 @@ public class Worker : MonoBehaviour
     [Header("UI manage")]
     [SerializeField] private GameObject textMeshContainer;
     public TextMesh textMesh;
+
+    [SerializeField] private WorkerHealthBarUIScript healthSlider;
 
     public bool isTakeDamage;
     void Start()
@@ -74,9 +77,10 @@ public class Worker : MonoBehaviour
         textMesh.text = workerName;
     }
 
-    public void TakeDamage(float dmg)
+    public void TakeDamage(int dmg)
     {
         workerHealth -= dmg;
+        healthSlider.SetHealth(workerHealth);
         if (workerHealth <= 0)
         {
             Die();
