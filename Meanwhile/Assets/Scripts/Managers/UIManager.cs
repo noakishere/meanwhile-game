@@ -15,6 +15,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
     public GameObject pauseMenu;
 
     public Button hireButton;
+    [SerializeField] private GameObject buyerPanel;
 
     private void OnEnable()
     {
@@ -34,7 +35,9 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         */
         GameEventBus.Subscribe(GameState.Pause, ShowPauseMenu);
         GameEventBus.Subscribe(GameState.Normal, HidePauseMenu);
+        GameEventBus.Subscribe(GameState.Buyer, ToggleBuyerPanel);
     }
+
 
 
     private void OnDisable()
@@ -82,7 +85,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
 
     public void ShowPauseMenu()
     {
-        Time.timeScale = 0.1f;
+        Time.timeScale = 0f;
         pauseMenu.SetActive(true);
     }
 
@@ -90,6 +93,11 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
     {
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
+    }
+
+    public void ToggleBuyerPanel()
+    {
+        buyerPanel.SetActive(!buyerPanel.activeInHierarchy);
     }
 
     public void DisableHireButton()
