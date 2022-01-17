@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a64a3c42f3728b4e9ef24927c9d8ef1, type: 3}
+  m_Name: Sea02
+  m_EditorClassIdentifier: 
+  m_AnimatedSprites:
+  - {fileID: 6064801786095445997, guid: b2a8fe0cef4f17d489f2fce2cb163a5a, type: 3}
+  - {fileID: 1021581688901816829, guid: b2a8fe0cef4f17d489f2fce2cb163a5a, type: 3}
+  - {fileID: 9024047431732482165, guid: b2a8fe0cef4f17d489f2fce2cb163a5a, type: 3}
+  - {fileID: 2251340216439233712, guid: b2a8fe0cef4f17d489f2fce2cb163a5a, type: 3}
+  m_MinSpeed: 1
+  m_MaxSpeed: 1
+  m_AnimationStartTime: 2
+  m_TileColliderType: 2
