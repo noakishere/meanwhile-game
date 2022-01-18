@@ -16,6 +16,8 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
 
     public Button hireButton;
     [SerializeField] private GameObject buyerPanel;
+    [SerializeField] private Button buyerPanelSellButton;
+    [SerializeField] private TMP_Text buyerPanelSellText;
 
     private void OnEnable()
     {
@@ -35,6 +37,8 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         */
         GameEventBus.Subscribe(GameState.Pause, ShowPauseMenu);
         GameEventBus.Subscribe(GameState.Normal, HidePauseMenu);
+
+        GameEventBus.Subscribe(GameState.Sell, UpdateSellText);
     }
 
 
@@ -96,7 +100,21 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
 
     public void ToggleBuyerPanel()
     {
+        UpdateSellText();
         buyerPanel.SetActive(!buyerPanel.activeInHierarchy);
+    }
+
+    public void UpdateSellText()
+    {
+        buyerPanelSellText.text = GameManager.Instance.Woods > 5 ? "Sell 5 woods" : GameManager.Instance.Woods > 0 ? $"Sell {GameManager.Instance.Woods}" : "No woods available to sell";
+        if (GameManager.Instance.Woods <= 0)
+        {
+            buyerPanelSellButton.enabled = false;
+        }
+        else
+        {
+            buyerPanelSellButton.enabled = true;
+        }
     }
 
     public void DisableHireButton()

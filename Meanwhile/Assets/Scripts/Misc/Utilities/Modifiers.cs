@@ -12,4 +12,6 @@ public static class Modifiers
 
     public const int WorkerPrice = 5;
 
+    public const int WoodPrice = 5;
+
 }

@@ -90,5 +90,22 @@ public class BuyerBehaviour : MonoBehaviour
         yield return null;
     }
 
+    public void BuyWood()
+    {
+        int woodNum = GameManager.Instance.Woods;
+
+        if (GameManager.Instance.Woods > 5)
+        {
+            woodNum = 5;
+            GameManager.Instance.IncrementGold(woodNum * Modifiers.WoodPrice);
+        }
+        else
+        {
+            GameManager.Instance.IncrementGold(woodNum * Modifiers.WoodPrice);
+        }
+        GameManager.Instance.LoseWood(woodNum);
+        GameEventBus.Publish(GameState.Sell);
+        print($"Buyer bought {woodNum} woods for {woodNum * Modifiers.WoodPrice} coins");
+    }
 
 }

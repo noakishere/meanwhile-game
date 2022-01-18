@@ -38,6 +38,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         woods += woodNum;
         GameEventBus.Publish(GameState.WoodUpdate);
     }
+    public void LoseWood(int woodNum)
+    {
+        woods -= woodNum;
+        GameEventBus.Publish(GameState.WoodUpdate);
+    }
     public void IncrementGold(int goldNum)
     {
         golds += goldNum;
