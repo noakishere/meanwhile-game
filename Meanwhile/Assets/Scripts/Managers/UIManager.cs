@@ -35,7 +35,6 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         */
         GameEventBus.Subscribe(GameState.Pause, ShowPauseMenu);
         GameEventBus.Subscribe(GameState.Normal, HidePauseMenu);
-        GameEventBus.Subscribe(GameState.Buyer, ToggleBuyerPanel);
     }
 
 

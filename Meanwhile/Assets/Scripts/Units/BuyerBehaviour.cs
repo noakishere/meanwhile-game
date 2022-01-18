@@ -19,9 +19,13 @@ public class BuyerBehaviour : MonoBehaviour
     [SerializeField] private GameObject buyerShip;
     [SerializeField] private Transform shipDockSection;
 
+    [SerializeField] private Vector2 initialPos;
+
+    [SerializeField] private bool isShipHere;
+
     private void OnEnable()
     {
-        GameEventBus.Subscribe(GameState.Buyer, Helpers.ControlTime);
+
     }
 
     private void OnDisable()
@@ -31,7 +35,11 @@ public class BuyerBehaviour : MonoBehaviour
 
     private void Start()
     {
+        initialPos = buyerShip.transform.position;
+
         timeUntilSpawn = ReturnRandNumber();
+
+        isShipHere = false;
     }
 
     void Update()
@@ -43,13 +51,15 @@ public class BuyerBehaviour : MonoBehaviour
 
         if (currentTimeBetween >= timeUntilSpawn)
         {
+            isShipHere = true;
             StartCoroutine(BuyerArrives());
-            // MoveTheShip();
-            // GameEventBus.Publish(GameState.Buyer);
-            // currentTimeBetween = 0f;
         }
 
-        currentTimeBetween += waitingTimeModifier * Time.deltaTime;
+        else if (!isShipHere)
+        {
+            currentTimeBetween += waitingTimeModifier * Time.deltaTime;
+        }
+
     }
 
     private float ReturnRandNumber()
@@ -57,19 +67,28 @@ public class BuyerBehaviour : MonoBehaviour
         return Random.Range(minTime, maxTime);
     }
 
-    private void MoveTheShip()
+    private void MoveTheShipToDock()
     {
         LeanTween.move(buyerShip, shipDockSection, 2f);
     }
 
+    public void MoveTheShipBack()
+    {
+        print($"Ship going back to {initialPos}");
+        LeanTween.move(buyerShip, initialPos, 2f);
+        isShipHere = false;
+    }
+
     public IEnumerator BuyerArrives()
     {
-        MoveTheShip();
+        currentTimeBetween = 0f;
+        MoveTheShipToDock();
 
         yield return new WaitForSeconds(2.1f);
 
-        GameEventBus.Publish(GameState.Buyer);
-        currentTimeBetween = 0f;
+        UIManager.Instance.ToggleBuyerPanel();
         yield return null;
     }
+
+
 }
