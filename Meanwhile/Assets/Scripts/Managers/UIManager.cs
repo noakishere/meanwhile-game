@@ -69,6 +69,8 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
                 GameEventBus.Publish(GameState.Pause);
             }
         }
+
+        UpdateWorkersText();
     }
 
     public void UpdateWoodsText()
@@ -84,6 +86,10 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
     public void UpdateWorkersText()
     {
         workersText.text = $"Workers: {WorkerManager.Instance.Workers.Count}/5";
+        if (GameManager.Instance.Golds < Modifiers.WorkerPrice || WorkerManager.Instance.Workers.Count == Modifiers.WorkerCap)
+            DisableHireButton();
+        else
+            EnableHireButton();
     }
 
     public void ShowPauseMenu()

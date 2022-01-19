@@ -15,6 +15,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
 
     }
+    private void Start()
+    {
+        golds = Modifiers.StartingGold;
+    }
 
     private void Update()
     {

@@ -23,16 +23,6 @@ public class BuyerBehaviour : MonoBehaviour
 
     [SerializeField] private bool isShipHere;
 
-    private void OnEnable()
-    {
-
-    }
-
-    private void OnDisable()
-    {
-        // GameEventBus.Unsubscribe(GameState.Buyer, Helpers.ControlTime);
-    }
-
     private void Start()
     {
         initialPos = buyerShip.transform.position;
@@ -59,7 +49,6 @@ public class BuyerBehaviour : MonoBehaviour
         {
             currentTimeBetween += waitingTimeModifier * Time.deltaTime;
         }
-
     }
 
     private float ReturnRandNumber()
@@ -74,6 +63,7 @@ public class BuyerBehaviour : MonoBehaviour
 
     public void MoveTheShipBack()
     {
+        Helpers.ControlTime();
         print($"Ship going back to {initialPos}");
         LeanTween.move(buyerShip, initialPos, 2f);
         isShipHere = false;
@@ -87,6 +77,7 @@ public class BuyerBehaviour : MonoBehaviour
         yield return new WaitForSeconds(2.1f);
 
         UIManager.Instance.ToggleBuyerPanel();
+        Helpers.SetTimeToZero();
         yield return null;
     }
 
@@ -103,9 +94,10 @@ public class BuyerBehaviour : MonoBehaviour
         {
             GameManager.Instance.IncrementGold(woodNum * Modifiers.WoodPrice);
         }
+
         GameManager.Instance.LoseWood(woodNum);
         GameEventBus.Publish(GameState.Sell);
+
         print($"Buyer bought {woodNum} woods for {woodNum * Modifiers.WoodPrice} coins");
     }
-
 }

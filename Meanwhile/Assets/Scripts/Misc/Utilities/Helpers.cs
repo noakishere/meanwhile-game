@@ -9,4 +9,9 @@ public static class Helpers
     {
         var condition = Time.timeScale == 1f ? Time.timeScale = 0f : Time.timeScale = 1f;
     }
+
+    public static void SetTimeToZero()
+    {
+        Time.timeScale = 0f;
+    }
 }
