@@ -35,8 +35,9 @@ public class WorkerMovement : MonoBehaviour
 
     [SerializeField] private float agentDistanceModifier; // this is added because agent doesn't get to the point with 0f distance but rather less than 0.5f
 
-    [Header("Worker Config")]
 
+
+    [Header("Worker Config")]
     private Worker workerConfig;
     public Worker WorkerConfig { get { return workerConfig; } }
     [SerializeField] private bool busy;

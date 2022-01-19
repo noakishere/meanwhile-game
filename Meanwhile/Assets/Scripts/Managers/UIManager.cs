@@ -8,14 +8,19 @@ using UnityEngine.UI;
 public class UIManager : SingletonMonoBehaviour<UIManager>
 {
     // THESE NEED TO BE CLEANED
-    public TMP_Text woodsText;
-    public TMP_Text goldsText;
-    public TMP_Text workersText;
 
-    public GameObject pauseMenu;
+    [Header("Resources")]
+    [SerializeField] private TMP_Text woodsText;
+    [SerializeField] private TMP_Text goldsText;
+    [SerializeField] private TMP_Text workersText;
+    [SerializeField] private TMP_Text dayCountText;
 
-    public Button hireButton;
+    [Header("GUI Elements")]
+    [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject buyerPanel;
+
+    [Header("Buttons")]
+    [SerializeField] private Button hireButton;
     [SerializeField] private Button buyerPanelSellButton;
     [SerializeField] private TMP_Text buyerPanelSellText;
 
@@ -121,6 +126,11 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         {
             buyerPanelSellButton.enabled = true;
         }
+    }
+
+    public void UpdateDayCountText()
+    {
+        dayCountText.text = $"Day: {DayManager.Instance.DayCount}";
     }
 
     public void DisableHireButton()
