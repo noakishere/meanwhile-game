@@ -12,6 +12,7 @@ public class WorkerOffloadingState : MonoBehaviour, IWorkerState
 
         if (!_workerMovement.isBusy)
         {
+            _workerMovement.isHome = false;
             _workerMovement.WorkerConfig.isTakeDamage = false;
             _workerMovement.ToggleBusy();
             StartCoroutine(OffloadingWoodCoroutine());
@@ -31,7 +32,8 @@ public class WorkerOffloadingState : MonoBehaviour, IWorkerState
         }
 
         // TODO: when day's done they should go to rest. A method should decide next move after offloading.
-        _workerMovement.Agent.SetDestination(_workerMovement.WoodChoppingStation.transform.position);
+        // _workerMovement.Agent.SetDestination(_workerMovement.WoodChoppingStation.transform.position);
+        _workerMovement.WhereToGoNext(_workerMovement.WoodChoppingStation);
         Debug.Log($"<color=#00FF00><b>{_workerMovement.WorkerConfig.WorkerName} is moving towards {_workerMovement.WoodChoppingStation}</b></color>");
         yield return new WaitForSeconds(1f);
         _workerMovement.ToggleBusy();

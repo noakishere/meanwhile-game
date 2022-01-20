@@ -80,6 +80,17 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
         GameEventBus.Publish(GameState.Hire); // to update th ui text for the right amount of workers
     }
 
+    public void AllWorkersGoToWork()
+    {
+        WorkerMovement[] workers = FindObjectsOfType<WorkerMovement>();
+
+        foreach (WorkerMovement worker in workers)
+        {
+            // worker.ToggleBusy();
+            worker.MoveToDestination(worker.WoodChoppingStation);
+        }
+    }
+
     public void AssignWorkerStation(WorkerMovement worker)
     {
         if (worker.WoodChoppingStation == null)

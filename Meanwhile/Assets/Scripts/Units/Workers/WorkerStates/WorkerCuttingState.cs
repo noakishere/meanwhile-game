@@ -12,6 +12,7 @@ public class WorkerCuttingState : MonoBehaviour, IWorkerState
 
         if (!_workerMovement.isBusy)
         {
+            _workerMovement.isHome = false;
             _workerMovement.WorkerConfig.isTakeDamage = false;
             _workerMovement.ToggleBusy();
             StartCoroutine(ChoppingWoodCoroutine());
@@ -29,8 +30,9 @@ public class WorkerCuttingState : MonoBehaviour, IWorkerState
             yield return new WaitForSeconds(2f);
         }
 
-        _workerMovement.Agent.SetDestination(_workerMovement.offloadStation.transform.position);
-        Debug.Log($"<color=#00FF00><b>{_workerMovement.WorkerConfig.WorkerName} is moving towards {_workerMovement.offloadStation.transform.position}</b></color>");
+        // _workerMovement.Agent.SetDestination(_workerMovement.offloadStation.transform.position);
+        _workerMovement.WhereToGoNext(_workerMovement.offloadStation);
+        Debug.Log($"<color=#00FF00><b>{_workerMovement.WorkerConfig.WorkerName} is moving towards {_workerMovement.Agent.destination}</b></color>");
         yield return new WaitForSeconds(1f);
         _workerMovement.ToggleBusy();
         yield return null;

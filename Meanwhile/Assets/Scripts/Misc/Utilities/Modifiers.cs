@@ -10,6 +10,8 @@ public static class Modifiers
     public const int WorkerDamageMedium = 20;
     public const int WorkerDamageHigh = 40;
 
+    public const int WorkerHealSmall = 2;
+
     public const int MaxWorkersCount = 5;
 
     public const int WorkerPrice = 5;

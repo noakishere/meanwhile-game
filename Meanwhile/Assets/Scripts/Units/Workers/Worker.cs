@@ -29,6 +29,7 @@ public class Worker : MonoBehaviour
     [SerializeField] private float currentTimeBetweenDmg;
 
     [Header("Information")]
+    public WorkerMovement workerMovement;
     [SerializeField] private NamesBank namesList;
     [SerializeField] private string workerName;
     public string WorkerName
@@ -52,6 +53,7 @@ public class Worker : MonoBehaviour
     public bool isTakeDamage;
     void Start()
     {
+        workerMovement = GetComponent<WorkerMovement>();
         isTakeDamage = false;
         GenerateInformation();
     }
@@ -67,6 +69,10 @@ public class Worker : MonoBehaviour
                 TakeDamage(Modifiers.WorkerDamageSmall);
             }
             currentTimeBetweenDmg += timeBetweenDmgModifier * Time.deltaTime;
+        }
+        else if (workerMovement.isHome)
+        {
+
         }
     }
 

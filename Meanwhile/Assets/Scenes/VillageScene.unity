@@ -430,7 +430,7 @@ MonoBehaviour:
   dayCount: 0
   timeCount: 0
   endDayCount: 5
-  timeIncreaseModifier: 1
+  timeIncreaseModifier: 0.25
   dayNightOverlay: {fileID: 1338339450}
   dayNightOverlayColor: {fileID: 1338339452}
   continueDayButton: {fileID: 40520905}

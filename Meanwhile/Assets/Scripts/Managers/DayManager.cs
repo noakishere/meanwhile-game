@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,7 +41,15 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
         {
             if (timeCount >= endDayCount)
             {
-                StartNightTimeCountdown();
+                isDayDone = true;
+                var workers = FindObjectsOfType<WorkerMovement>();
+
+                IEnumerable<WorkerMovement> workersNotAtHome = workers.Where(worker => !worker.isHome);
+
+                if (workersNotAtHome.Count() == 0)
+                {
+                    StartNightTimeCountdown();
+                }
             }
             timeCount += timeIncreaseModifier * Time.deltaTime;
         }
@@ -60,6 +69,7 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
             dayNightOverlayColor.color = c;
         }).setOnComplete(() =>
         {
+            // TODO: Add TEXT
             print("Day is done");
             timeCount = 0;
             dayCount++;
@@ -70,6 +80,7 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
 
     public void StartDayTimeCountDown()
     {
+        isDayDone = false;
         UIManager.Instance.UpdateDayCountText();
         LeanTween.value(dayNightOverlay, 1, 0, 3).setOnUpdate((float val) =>
         {
@@ -80,5 +91,6 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
         dayNightOverlay.SetActive(false);
         Helpers.ControlTime();
         isCount = true;
+        WorkerManager.Instance.AllWorkersGoToWork();
     }
 }

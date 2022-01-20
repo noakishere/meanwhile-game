@@ -43,13 +43,15 @@ public class WorkerMovement : MonoBehaviour
     [SerializeField] private bool busy;
     public bool isBusy => busy;
 
+    public bool isHome;
+
     private void Awake()
     {
         workerConfig = GetComponent<Worker>();
     }
 
     // Worker State Management
-    private IWorkerState _idleState, _walkingState, _cuttingState, _offloadingState;
+    private IWorkerState _idleState, _walkingState, _cuttingState, _offloadingState, _workerHomeState;
 
     private WorkerStateContext _workerStateContext;
 
@@ -61,6 +63,7 @@ public class WorkerMovement : MonoBehaviour
         _walkingState = gameObject.AddComponent<WorkerWalkingState>();
         _cuttingState = gameObject.AddComponent<WorkerCuttingState>();
         _offloadingState = gameObject.AddComponent<WorkerOffloadingState>();
+        _workerHomeState = gameObject.AddComponent<WorkerHomeState>();
 
         _workerStateContext.Transition(_idleState);
     }
@@ -103,6 +106,10 @@ public class WorkerMovement : MonoBehaviour
         {
             _workerStateContext.Transition(_walkingState);
         }
+        else if (Vector3.Distance(transform.position, workerHouse.transform.position) <= agentDistanceModifier)
+        {
+            _workerStateContext.Transition(_workerHomeState);
+        }
         else
         {
             _workerStateContext.Transition(_idleState);
@@ -143,6 +150,19 @@ public class WorkerMovement : MonoBehaviour
     public void ToggleBusy()
     {
         busy = !busy;
+    }
+
+    public void WhereToGoNext(GameObject nextDestination)
+    {
+        if (DayManager.Instance.IsDayDone)
+        {
+            busy = false;
+            agent.SetDestination(workerHouse.transform.position);
+        }
+        else
+        {
+            agent.SetDestination(nextDestination.transform.position);
+        }
     }
 
     #endregion
