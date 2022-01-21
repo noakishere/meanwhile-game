@@ -12,7 +12,6 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
 
     [SerializeField] private bool isCount;
 
-    public bool hasCalledNight;
     [SerializeField] private int dayCount;
     public int DayCount => dayCount;
 
@@ -35,7 +34,7 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
         UIManager.Instance.UpdateDayCountText();
 
         isCount = true;
-        hasCalledNight = false;
+        isDayDone = false;
     }
 
     void Update()
@@ -56,7 +55,6 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
                 else if (!isDayDone)
                 {
                     GameEventBus.Publish(GameState.DayEndGraphics);
-                    hasCalledNight = true;
                 }
                 isDayDone = true;
             }
