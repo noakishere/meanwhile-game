@@ -91,6 +91,13 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
         }
     }
 
+    public WorkerMovement[] GetWorkersInTheScene()
+    {
+        WorkerMovement[] workers = FindObjectsOfType<WorkerMovement>();
+
+        return workers;
+    }
+
     public void AssignWorkerStation(WorkerMovement worker)
     {
         if (worker.WoodChoppingStation == null)

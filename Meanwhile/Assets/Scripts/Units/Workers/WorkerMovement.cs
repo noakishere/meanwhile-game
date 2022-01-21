@@ -45,6 +45,8 @@ public class WorkerMovement : MonoBehaviour
 
     public bool isHome;
 
+    public bool isGoingHome; // UGLY
+
     private void Awake()
     {
         workerConfig = GetComponent<Worker>();
@@ -106,7 +108,7 @@ public class WorkerMovement : MonoBehaviour
         {
             _workerStateContext.Transition(_walkingState);
         }
-        else if (Vector3.Distance(transform.position, workerHouse.transform.position) <= agentDistanceModifier)
+        else if (workerHouse != null && Vector3.Distance(transform.position, workerHouse.transform.position) <= agentDistanceModifier)
         {
             _workerStateContext.Transition(_workerHomeState);
         }
@@ -154,14 +156,21 @@ public class WorkerMovement : MonoBehaviour
 
     public void WhereToGoNext(GameObject nextDestination)
     {
-        if (DayManager.Instance.IsDayDone)
+        if (DayManager.Instance.IsDayDone && !isGoingHome)
         {
+            isGoingHome = true;
             busy = false;
             agent.SetDestination(workerHouse.transform.position);
+
+        }
+        else if (agent.destination != workerHouse.transform.position && isGoingHome)
+        {
+            agent.SetDestination(workerHouse.transform.position); // Just to cover our ass in case something happens in the middle
         }
         else
         {
             agent.SetDestination(nextDestination.transform.position);
+            isGoingHome = false;
         }
     }
 

@@ -23,6 +23,16 @@ public class BuyerBehaviour : MonoBehaviour
 
     [SerializeField] private bool isShipHere;
 
+    private void OnEnable()
+    {
+        GameEventBus.Subscribe(GameState.DayStart, delegate { if (DayManager.Instance.DayCount > 1) StartCoroutine(BuyerArrives()); });
+    }
+
+    private void OnDisable()
+    {
+        GameEventBus.Unsubscribe(GameState.DayStart, delegate { if (DayManager.Instance.DayCount > 1) StartCoroutine(BuyerArrives()); });
+    }
+
     private void Start()
     {
         initialPos = buyerShip.transform.position;
@@ -34,21 +44,22 @@ public class BuyerBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            StartCoroutine(BuyerArrives());
-        }
+        // TESTING PURPOSES
+        // if (Input.GetKeyDown(KeyCode.Y))
+        // {
+        //     StartCoroutine(BuyerArrives());
+        // }
 
-        if (currentTimeBetween >= timeUntilSpawn)
-        {
-            isShipHere = true;
-            StartCoroutine(BuyerArrives());
-        }
+        // if (currentTimeBetween >= timeUntilSpawn)
+        // {
+        //     isShipHere = true;
+        //     StartCoroutine(BuyerArrives());
+        // }
 
-        else if (!isShipHere)
-        {
-            currentTimeBetween += waitingTimeModifier * Time.deltaTime;
-        }
+        // else if (!isShipHere)
+        // {
+        //     currentTimeBetween += waitingTimeModifier * Time.deltaTime;
+        // }
     }
 
     private float ReturnRandNumber()
@@ -64,7 +75,9 @@ public class BuyerBehaviour : MonoBehaviour
     public void MoveTheShipBack()
     {
         Helpers.ControlTime();
+
         print($"Ship going back to {initialPos}");
+
         LeanTween.move(buyerShip, initialPos, 2f);
         isShipHere = false;
     }

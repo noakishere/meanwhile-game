@@ -10,8 +10,12 @@ public class WorkerHomeState : MonoBehaviour, IWorkerState
     {
         if (!_workerMovement) { _workerMovement = workerMovement; }
 
+        if (!_workerMovement.isHome)
+        {
+            if (_workerMovement.isBusy) _workerMovement.ToggleBusy();
+            _workerMovement.WorkerConfig.isTakeDamage = false;
+        }
         _workerMovement.isHome = true;
-        if (_workerMovement.isBusy) _workerMovement.ToggleBusy();
-        _workerMovement.WorkerConfig.isTakeDamage = false;
+        _workerMovement.isGoingHome = false;
     }
 }

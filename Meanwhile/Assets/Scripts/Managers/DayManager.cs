@@ -57,6 +57,8 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
 
     public void StartNightTimeCountdown()
     {
+        // GameEventBus.Publish(GameState.DayEndGraphics);
+
         continueDayButton.SetActive(false);
 
         isCount = false;
@@ -70,7 +72,6 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
         }).setOnComplete(() =>
         {
             // TODO: Add TEXT
-            print("Day is done");
             timeCount = 0;
             dayCount++;
             Helpers.SetTimeToZero();
@@ -82,15 +83,23 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
     {
         isDayDone = false;
         UIManager.Instance.UpdateDayCountText();
-        LeanTween.value(dayNightOverlay, 1, 0, 3).setOnUpdate((float val) =>
+
+        continueDayButton.SetActive(false);
+        Helpers.ControlTime();
+
+        LeanTween.value(dayNightOverlay, 1f, 0f, 1f).setOnUpdate((float val) =>
         {
             Color c = dayNightOverlayColor.color;
             c.a = val;
             dayNightOverlayColor.color = c;
+        }).setOnComplete(() =>
+        {
+            isCount = true;
+            WorkerManager.Instance.AllWorkersGoToWork();
+            dayNightOverlay.SetActive(false);
+            // Call all the events for the start of the day
+            GameEventBus.Publish(GameState.DayStart);
         });
-        dayNightOverlay.SetActive(false);
-        Helpers.ControlTime();
-        isCount = true;
-        WorkerManager.Instance.AllWorkersGoToWork();
+
     }
 }

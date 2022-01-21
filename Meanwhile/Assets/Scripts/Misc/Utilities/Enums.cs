@@ -15,5 +15,7 @@ public enum GameState
     Sell,
     WoodUpdate,
     GoldUpdate,
-    Pause
+    Pause,
+    DayEndGraphics,
+    DayStart
 }

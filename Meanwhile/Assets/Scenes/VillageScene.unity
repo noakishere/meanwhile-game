@@ -3223,6 +3223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1013921141}
   - component: {fileID: 1013921140}
+  - component: {fileID: 1013921142}
   m_Layer: 0
   m_Name: Global Volume
   m_TagString: Untagged
@@ -3261,6 +3262,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1013921142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013921139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2c8623be9232846af8efdcf223abd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volume: {fileID: 0}
+  bloom: {fileID: 0}
 --- !u!1 &1053200758
 GameObject:
   m_ObjectHideFlags: 0
@@ -54715,10 +54730,10 @@ RectTransform:
   m_Father: {fileID: 1151698321}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1890881788
 GameObject:
