@@ -61,7 +61,6 @@ public class Worker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if (state == WorkerState.Walking) // Maybe if != idle then take damage? we'll see
         if (isTakeDamage)
         {
             if (currentTimeBetweenDmg >= timeBetweenDmg)

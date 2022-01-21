@@ -11,6 +11,8 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
     public bool IsDayDone => isDayDone;
 
     [SerializeField] private bool isCount;
+
+    public bool hasCalledNight;
     [SerializeField] private int dayCount;
     public int DayCount => dayCount;
 
@@ -33,6 +35,7 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
         UIManager.Instance.UpdateDayCountText();
 
         isCount = true;
+        hasCalledNight = false;
     }
 
     void Update()
@@ -41,7 +44,7 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
         {
             if (timeCount >= endDayCount)
             {
-                isDayDone = true;
+
                 var workers = FindObjectsOfType<WorkerMovement>();
 
                 IEnumerable<WorkerMovement> workersNotAtHome = workers.Where(worker => !worker.isHome);
@@ -50,6 +53,12 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
                 {
                     StartNightTimeCountdown();
                 }
+                else if (!isDayDone)
+                {
+                    GameEventBus.Publish(GameState.DayEndGraphics);
+                    hasCalledNight = true;
+                }
+                isDayDone = true;
             }
             timeCount += timeIncreaseModifier * Time.deltaTime;
         }
@@ -57,8 +66,6 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
 
     public void StartNightTimeCountdown()
     {
-        // GameEventBus.Publish(GameState.DayEndGraphics);
-
         continueDayButton.SetActive(false);
 
         isCount = false;
