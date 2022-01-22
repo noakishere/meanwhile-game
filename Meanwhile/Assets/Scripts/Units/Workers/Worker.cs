@@ -99,10 +99,22 @@ public class Worker : MonoBehaviour
 
     public void Die()
     {
-        WorkerManager.Instance.WorkerOut(this);
-        gameObject.GetComponent<WorkerMovement>().workerHouse.GetComponent<WorkerHouses>().DeAssign();
-        gameObject.GetComponent<WorkerMovement>().WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
-        Destroy(gameObject);
+        workerMovement.Agent.isStopped = true;
+
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        LeanTween.value(gameObject, 1f, 0f, 1).setOnUpdate((float val) =>
+        {
+            Color c = spriteRenderer.color;
+            c.a = val;
+            spriteRenderer.color = c;
+        }).setOnComplete(() =>
+        {
+            WorkerManager.Instance.WorkerOut(this);
+            gameObject.GetComponent<WorkerMovement>().workerHouse.GetComponent<WorkerHouses>().DeAssign();
+            gameObject.GetComponent<WorkerMovement>().WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
+            Destroy(gameObject);
+        });
     }
 
 
