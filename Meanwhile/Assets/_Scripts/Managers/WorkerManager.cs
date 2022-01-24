@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
 {
@@ -25,6 +27,11 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
 
     public GameObject offloadStation;
 
+    [Header("UI Section")]
+    public GameObject deathNotifLayout;
+    [SerializeField] private GameObject workerDeathPanel;
+    [SerializeField] private TMP_Text workerDeathText;
+
     private void OnEnable()
     {
         // GameEventBus.Subscribe(GameState.Hire, UpdateWorkerCount);
@@ -33,6 +40,8 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
     void Start()
     {
         choppingWoodStations = FindObjectsOfType<WoodStation>();
+
+        workerDeathText = workerDeathPanel.GetComponentInChildren<TMP_Text>();
     }
 
     void Update()
@@ -76,8 +85,21 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
     public void WorkerOut(Worker thisWorker)
     {
         if (workers.Count == 5) { UIManager.Instance.EnableHireButton(); } // THERE SHOULD BE A BETTER WAY TO DO THIS
+        WorkerOutDeathPopUp(thisWorker);
         workers.Remove(thisWorker);
         GameEventBus.Publish(GameState.Hire); // to update th ui text for the right amount of workers
+    }
+
+    private void WorkerOutDeathPopUp(Worker thisWorker)
+    {
+        float initialPosition = workerDeathPanel.transform.position.y;
+
+        workerDeathText.text = $"{thisWorker.WorkerName} has died because of overworking himself.";
+
+        var newObj = GameObject.Instantiate(workerDeathPanel);
+        newObj.transform.SetParent(deathNotifLayout.transform, false);
+
+        // LeanTween.moveX(newObj, 184f, 2f);
     }
 
     public void AllWorkersGoToWork()

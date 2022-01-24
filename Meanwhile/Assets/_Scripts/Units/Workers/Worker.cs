@@ -29,7 +29,7 @@ public class Worker : MonoBehaviour
     [SerializeField] private float currentTimeBetweenDmg;
 
     [Header("Information")]
-    public WorkerMovement workerMovement;
+    [SerializeField] private WorkerMovement workerMovement;
     [SerializeField] private NamesBank namesList;
     [SerializeField] private string workerName;
     public string WorkerName
@@ -111,8 +111,8 @@ public class Worker : MonoBehaviour
         }).setOnComplete(() =>
         {
             WorkerManager.Instance.WorkerOut(this);
-            gameObject.GetComponent<WorkerMovement>().workerHouse.GetComponent<WorkerHouses>().DeAssign();
-            gameObject.GetComponent<WorkerMovement>().WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
+            workerMovement.workerHouse.GetComponent<WorkerHouses>().DeAssign();
+            workerMovement.WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
             Destroy(gameObject);
         });
     }
