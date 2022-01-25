@@ -80,17 +80,17 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
 
     public void UpdateWoodsText()
     {
-        woodsText.text = $"Woods: {GameManager.Instance.Woods}";
+        woodsText.text = $"{GameManager.Instance.Woods}";
     }
 
     public void UpdateGoldsText()
     {
-        goldsText.text = $"Golds: {GameManager.Instance.Golds}";
+        goldsText.text = $"{GameManager.Instance.Golds}";
     }
 
     public void UpdateWorkersText()
     {
-        workersText.text = $"Workers: {WorkerManager.Instance.Workers.Count}/5";
+        workersText.text = $"{WorkerManager.Instance.Workers.Count}/5";
         if (GameManager.Instance.Golds < Modifiers.WorkerPrice || WorkerManager.Instance.Workers.Count == Modifiers.WorkerCap)
             DisableHireButton();
         else
