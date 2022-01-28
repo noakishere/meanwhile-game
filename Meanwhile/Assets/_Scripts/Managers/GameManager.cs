@@ -35,6 +35,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         {
             SpendGold(5);
         }
+
+        if (DayManager.Instance.DayCount > 1 && golds <= 0 && WorkerManager.Instance.Workers.Count == 0)
+        {
+            LevelManager.Instance.LoadNextScene(); // just a test we need a proper game over menu
+        }
+
     }
 
     public void IncrementWood(int woodNum)

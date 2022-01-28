@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class UIManager : SingletonMonoBehaviour<UIManager>
 {
-    // THESE NEED TO BE CLEANED
-
     [Header("Resources")]
     [SerializeField] private TMP_Text woodsText;
     [SerializeField] private TMP_Text goldsText;
