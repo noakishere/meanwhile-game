@@ -82,10 +82,19 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
     }
 
     // Look at it as if when the worker dies, the worker manager knows that an empty spot is available. Dark isn't it?
-    public void WorkerOut(Worker thisWorker)
+    public void WorkerOut(Worker thisWorker, bool hasEscaped = false)
     {
         if (workers.Count == 5) { UIManager.Instance.EnableHireButton(); } // THERE SHOULD BE A BETTER WAY TO DO THIS
-        WorkerOutDeathPopUp(thisWorker);
+
+        if (hasEscaped)
+        {
+            WorkerOutEscapePopUp(thisWorker);
+        }
+        else
+        {
+            WorkerOutDeathPopUp(thisWorker);
+        }
+
         workers.Remove(thisWorker);
         GameEventBus.Publish(GameState.Hire); // to update th ui text for the right amount of workers
     }
@@ -95,6 +104,17 @@ public class WorkerManager : SingletonMonoBehaviour<WorkerManager>
         float initialPosition = workerDeathPanel.transform.position.y;
 
         workerDeathText.text = $"{thisWorker.WorkerName} has died because of overworking himself.";
+
+        var newObj = GameObject.Instantiate(workerDeathPanel);
+        newObj.transform.SetParent(deathNotifLayout.transform, false);
+
+        // LeanTween.moveX(newObj, 184f, 2f);
+    }
+    private void WorkerOutEscapePopUp(Worker thisWorker)
+    {
+        float initialPosition = workerDeathPanel.transform.position.y;
+
+        workerDeathText.text = $"{thisWorker.WorkerName} escaped and ran away. The conditions were too harsh for his spirit.";
 
         var newObj = GameObject.Instantiate(workerDeathPanel);
         newObj.transform.SetParent(deathNotifLayout.transform, false);

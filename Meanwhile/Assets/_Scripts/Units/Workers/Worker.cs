@@ -117,6 +117,21 @@ public class Worker : MonoBehaviour
         });
     }
 
+    public void Escape()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = false;
+
+        workerMovement.Agent.isStopped = true;
+
+        WorkerManager.Instance.WorkerOut(this, true);
+
+        workerMovement.workerHouse.GetComponent<WorkerHouses>().DeAssign();
+        workerMovement.WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
+
+        Destroy(gameObject);
+    }
+
 
     public void SetState(WorkerState newState)
     {
