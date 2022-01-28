@@ -99,6 +99,8 @@ public class Worker : MonoBehaviour
 
     public void Die()
     {
+        isTakeDamage = false; // should fix the constant call
+
         workerMovement.Agent.isStopped = true;
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -119,9 +121,6 @@ public class Worker : MonoBehaviour
 
     public void Escape()
     {
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.enabled = false;
-
         workerMovement.Agent.isStopped = true;
 
         WorkerManager.Instance.WorkerOut(this, true);
