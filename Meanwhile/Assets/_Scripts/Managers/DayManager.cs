@@ -79,7 +79,7 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
             // TODO: Add TEXT
             timeCount = 0;
             dayCount++;
-            Helpers.SetTimeToZero();
+            // Helpers.SetTimeToZero();
             continueDayButton.SetActive(true);
         });
     }
@@ -90,7 +90,7 @@ public class DayManager : SingletonMonoBehaviour<DayManager>
         UIManager.Instance.UpdateDayCountText();
 
         continueDayButton.SetActive(false);
-        Helpers.ControlTime();
+        // Helpers.ControlTime();
 
         LeanTween.value(dayNightOverlay, 1f, 0f, 1f).setOnUpdate((float val) =>
         {

@@ -535,9 +535,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   workerHealth: 100
-  timeBetweenDmg: 3
+  timeBetweenDmg: 1.25
   timeBetweenDmgModifier: 0.25
   currentTimeBetweenDmg: 0
+  workerMovement: {fileID: 0}
   namesList: {fileID: 11400000, guid: 7790e27d6ed1e904e90ee07b6d4cf467, type: 2}
   workerName: 
   resourceCarryCap: 5
@@ -566,6 +567,8 @@ MonoBehaviour:
   workerHouse: {fileID: 0}
   agentDistanceModifier: 0.5
   busy: 0
+  isHome: 0
+  isGoingHome: 0
 --- !u!195 &2016424281
 NavMeshAgent:
   m_ObjectHideFlags: 0
