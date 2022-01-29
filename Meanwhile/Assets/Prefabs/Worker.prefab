@@ -400,6 +400,7 @@ GameObject:
   - component: {fileID: 2876244613363422921}
   - component: {fileID: 8630894388054007900}
   - component: {fileID: 2016424281}
+  - component: {fileID: 978853851}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -547,6 +548,7 @@ MonoBehaviour:
   textMesh: {fileID: 1993790783}
   healthSlider: {fileID: 5707110936903444904}
   isTakeDamage: 0
+  workerAnim: {fileID: 0}
 --- !u!114 &8630894388054007900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,3 +593,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!95 &978853851
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2876244613363422924}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2fcaef67ab27e02478baa53202c18d05, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

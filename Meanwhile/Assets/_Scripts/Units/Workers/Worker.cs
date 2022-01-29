@@ -51,9 +51,15 @@ public class Worker : MonoBehaviour
     [SerializeField] private WorkerHealthBarUIScript healthSlider;
 
     public bool isTakeDamage;
+
+    [Header("Worker Animation Section")]
+    [SerializeField] private Animator workerAnim;
+
     void Start()
     {
         workerMovement = GetComponent<WorkerMovement>();
+        workerAnim = GetComponent<Animator>();
+
         isTakeDamage = false;
         GenerateInformation();
     }
@@ -63,7 +69,12 @@ public class Worker : MonoBehaviour
     {
         if (isTakeDamage)
         {
-            if (currentTimeBetweenDmg >= timeBetweenDmg)
+            if (workerHealth <= 0)
+            {
+                isTakeDamage = false;
+                Die();
+            }
+            else if (currentTimeBetweenDmg >= timeBetweenDmg)
             {
                 TakeDamage(Modifiers.WorkerDamageSmall);
             }
@@ -84,39 +95,62 @@ public class Worker : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
+        // if (workerHealth <= 0)
+        // {
+        //     print("HELLO");
+        //     isTakeDamage = false; // should fix the constant call
+        //     Die();
+        // }
+        // else
+        // {
+        currentTimeBetweenDmg = 0f;
+        print($"Worker received {dmg} damages");
+        // }
         workerHealth -= dmg;
         healthSlider.SetHealth(workerHealth);
-        if (workerHealth <= 0)
-        {
-            Die();
-        }
-        else
-        {
-            currentTimeBetweenDmg = 0f;
-            print($"Worker received {dmg} damages");
-        }
     }
+
+    // public void Die()
+    // {
+
+
+    //     workerMovement.Agent.isStopped = true;
+
+    //     SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+    //     LeanTween.value(gameObject, 1f, 0f, 1).setOnUpdate((float val) =>
+    //     {
+    //         Color c = spriteRenderer.color;
+    //         c.a = val;
+    //         spriteRenderer.color = c;
+    //     }).setOnComplete(() =>
+    //     {
+    //         WorkerManager.Instance.WorkerOut(this);
+    //         workerMovement.workerHouse.GetComponent<WorkerHouses>().DeAssign();
+    //         workerMovement.WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
+    //         Destroy(this.gameObject, 2f);
+    //     });
+    // }
 
     public void Die()
     {
-        isTakeDamage = false; // should fix the constant call
+        StartCoroutine(DeathProcess());
+    }
 
+    public IEnumerator DeathProcess()
+    {
         workerMovement.Agent.isStopped = true;
 
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        workerAnim.SetTrigger("Death");
 
-        LeanTween.value(gameObject, 1f, 0f, 1).setOnUpdate((float val) =>
-        {
-            Color c = spriteRenderer.color;
-            c.a = val;
-            spriteRenderer.color = c;
-        }).setOnComplete(() =>
-        {
-            WorkerManager.Instance.WorkerOut(this);
-            workerMovement.workerHouse.GetComponent<WorkerHouses>().DeAssign();
-            workerMovement.WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
-            Destroy(gameObject);
-        });
+        yield return new WaitForSeconds(0.3f);
+
+        WorkerManager.Instance.WorkerOut(this);
+
+        workerMovement.workerHouse.GetComponent<WorkerHouses>().DeAssign();
+        workerMovement.WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
+
+        Destroy(this.gameObject);
     }
 
     public void Escape()
@@ -128,7 +162,7 @@ public class Worker : MonoBehaviour
         workerMovement.workerHouse.GetComponent<WorkerHouses>().DeAssign();
         workerMovement.WoodChoppingStation.GetComponent<WoodStation>().DeAssign();
 
-        Destroy(gameObject);
+        Destroy(this.gameObject);
     }
 
 
